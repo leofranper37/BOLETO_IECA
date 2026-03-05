@@ -1,4 +1,5 @@
 import os
+import traceback
 from flask import current_app, render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
 
@@ -43,14 +44,21 @@ def init_routes(app):
 				return render_template('form.html', erro='Configuração de PIX não encontrada no servidor.')
 
 			pdf_dir = os.path.join(current_app.root_path, 'static', 'pdfs')
-			filename = gerar_pdf(
-				nome=nome,
-				valor_total=valor_total,
-				parcelas=parcelas,
-				pix_code=pix_code,
-				pasta_destino=pdf_dir,
-				data_primeiro_vencimento=None,
-			)
-			return render_template('boleto_gerado.html', filename=filename)
+			try:
+				filename = gerar_pdf(
+					nome=nome,
+					valor_total=valor_total,
+					parcelas=parcelas,
+					pix_code=pix_code,
+					pasta_destino=pdf_dir,
+					data_primeiro_vencimento=None,
+				)
+				return render_template('boleto_gerado.html', filename=filename)
+			except Exception:
+				traceback.print_exc()
+				return render_template(
+					'form.html',
+					erro='Nao foi possivel gerar o boleto agora. Tente novamente em instantes.'
+				)
 
 		return render_template('form.html')
