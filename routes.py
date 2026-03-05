@@ -39,9 +39,15 @@ def init_routes(app):
 				)
 
 			valor_total = float(current_app.config.get('VALOR_TOTAL', 400.0))
-			pix_code = current_app.config.get('PIX_CODE', '')
-			if not pix_code:
-				return render_template('form.html', erro='Configuração de PIX não encontrada no servidor.')
+			pix_code = (current_app.config.get('PIX_CODE', '') or '').strip()
+			pix_key = (current_app.config.get('PIX_KEY', '') or '').strip()
+			pix_receiver_name = (current_app.config.get('PIX_RECEIVER_NAME', '') or 'IECA').strip()
+			pix_city = (current_app.config.get('PIX_CITY', '') or 'ANGRA').strip()
+			if (not pix_code or pix_code == 'CONFIGURE_O_PIX_CODE_NAS_VARIAVEIS_DE_AMBIENTE') and not pix_key:
+				return render_template(
+					'form.html',
+					erro='Configure PIX_CODE ou PIX_KEY nas variáveis de ambiente do servidor.'
+				)
 
 			pdf_dir = os.path.join(current_app.root_path, 'static', 'pdfs')
 			try:
@@ -50,6 +56,9 @@ def init_routes(app):
 					valor_total=valor_total,
 					parcelas=parcelas,
 					pix_code=pix_code,
+					pix_key=pix_key,
+					pix_receiver_name=pix_receiver_name,
+					pix_city=pix_city,
 					pasta_destino=pdf_dir,
 					data_primeiro_vencimento=None,
 				)

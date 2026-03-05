@@ -6,7 +6,20 @@ from datetime import datetime, timedelta
 import re
 import uuid
 
-def gerar_pdf(nome, valor_total, parcelas, pix_code, pasta_destino, data_primeiro_vencimento=None):
+from pix_utils import gerar_pix_copia_e_cola
+
+
+def gerar_pdf(
+	nome,
+	valor_total,
+	parcelas,
+	pix_code,
+	pasta_destino,
+	data_primeiro_vencimento=None,
+	pix_key='',
+	pix_receiver_name='IECA',
+	pix_city='ANGRA'
+):
 	pdf = FPDF()
 	valor_parcela = float(valor_total) / int(parcelas)
 	os.makedirs(pasta_destino, exist_ok=True)
@@ -28,6 +41,17 @@ def gerar_pdf(nome, valor_total, parcelas, pix_code, pasta_destino, data_primeir
 	sufixo_unico = uuid.uuid4().hex[:8]
 
 	for i in range(int(parcelas)):
+		if pix_code and pix_code != 'CONFIGURE_O_PIX_CODE_NAS_VARIAVEIS_DE_AMBIENTE':
+			pix_payload = pix_code
+		else:
+			pix_payload = gerar_pix_copia_e_cola(
+				chave_pix=pix_key,
+				nome_recebedor=pix_receiver_name,
+				cidade=pix_city,
+				valor=valor_parcela,
+				txid=f'PARC{i+1:03d}'
+			)
+
 		pdf.add_page()
 		pdf.set_font('Arial', 'B', 18)
 		pdf.cell(0, 12, 'Boleto Retiro Espiritual 2027 - IECA', ln=True, align='C')
@@ -45,10 +69,10 @@ def gerar_pdf(nome, valor_total, parcelas, pix_code, pasta_destino, data_primeir
 		pdf.set_font('Arial', 'B', 12)
 		pdf.cell(0, 10, 'PIX:', ln=True)
 		pdf.set_font('Arial', '', 11)
-		pdf.multi_cell(0, 8, pix_code)
+		pdf.multi_cell(0, 8, pix_payload)
 		if qrcode_disponivel:
 			# Gerar QR Code do PIX
-			qr_img = qrcode.make(pix_code)
+			qr_img = qrcode.make(pix_payload)
 			qr_path = os.path.join(pasta_destino, f"pix_qr_{sufixo_unico}_{i}.png")
 			qr_img.save(qr_path)
 			pdf.image(qr_path, x=pdf.get_x()+60, y=pdf.get_y(), w=50, h=50)

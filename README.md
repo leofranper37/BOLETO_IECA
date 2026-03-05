@@ -22,7 +22,10 @@ python app.py
 ## Variáveis de ambiente
 
 - `SECRET_KEY`: chave de segurança do Flask.
-- `PIX_CODE`: código PIX que será impresso no boleto.
+- `PIX_CODE`: código PIX completo (copia e cola) já pronto.
+- `PIX_KEY`: chave PIX (email/celular/CPF/CNPJ). Se preencher esta chave, o sistema gera o PIX automaticamente.
+- `PIX_RECEIVER_NAME`: nome do recebedor no PIX (ex: `IECA`).
+- `PIX_CITY`: cidade do recebedor no PIX (ex: `ANGRA`).
 - `VALOR_TOTAL`: valor total (ex: `400`).
 - `MAX_PARCELAS`: limite de parcelas (ex: `10`).
 - `PORT`: porta usada em produção (plataforma define automaticamente).
@@ -53,9 +56,16 @@ git push -u origin main
    - **Start Command**: `gunicorn wsgi:app`
 5. Em **Environment Variables**, adicione:
    - `SECRET_KEY`
-   - `PIX_CODE`
+   - `PIX_KEY` (recomendado)
+   - `PIX_RECEIVER_NAME`
+   - `PIX_CITY`
    - `VALOR_TOTAL`
    - `MAX_PARCELAS`
 6. Clique em **Create Web Service**.
 
 Ao finalizar o deploy, o Render gera uma URL pública (ex.: `https://seu-app.onrender.com`) para você compartilhar com as pessoas.
+
+### Compartilhar link com outras pessoas
+
+Depois do deploy no Render ficar como **Live**, copie a URL do serviço e envie para as pessoas.
+Exemplo: `https://seu-app.onrender.com`

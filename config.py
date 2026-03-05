@@ -9,3 +9,6 @@ class Config:
 		'PIX_CODE',
 		'CONFIGURE_O_PIX_CODE_NAS_VARIAVEIS_DE_AMBIENTE'
 	)
+	PIX_KEY = os.getenv('PIX_KEY', '')
+	PIX_RECEIVER_NAME = os.getenv('PIX_RECEIVER_NAME', 'IECA')
+	PIX_CITY = os.getenv('PIX_CITY', 'ANGRA')
