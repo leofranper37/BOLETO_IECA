@@ -1,0 +1,6 @@
+Flask
+fpdf
+Flask-WTF
+WTForms
+qrcode[pil]
+gunicorn

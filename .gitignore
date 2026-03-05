@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+static/pdfs/*.pdf
+static/pdfs/*.png
+.DS_Store
+.vscode/

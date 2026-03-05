@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <style>
+            .msg {
+                color: #222;
+                padding: 10px 14px;
+                border-radius: 6px;
+                margin-bottom: 14px;
+                font-weight: 500;
+            }
+            .msg-sucesso {
+                background: linear-gradient(90deg,#e0ffe0,#b2ffb2);
+            }
+            .msg-erro {
+                background: linear-gradient(90deg,#ffe0e0,#ffb2b2);
+            }
+        </style>
+    <meta charset="UTF-8">
+    <title>Cadastro Retiro Espiritual 2027 - IECA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: #fff;
+            margin-top: 32px;
+            padding: 32px 24px 24px 24px;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px 0 rgba(44,62,80,0.13), 0 1.5px 4px 0 rgba(44,62,80,0.07);
+            border: 2.5px solid #2dbe7e;
+            max-width: 440px;
+            width: 100%;
+        }
+        h2 {
+            color: #2d3a4b;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        form label {
+            display: block;
+            margin-bottom: 12px;
+            color: #34495e;
+            font-weight: 500;
+        }
+        form input[type="text"],
+        form input[type="number"] {
+            width: 100%;
+            padding: 8px 10px;
+            margin-top: 4px;
+            border: 1px solid #cfd8dc;
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        #pessoas_container > div {
+            transition: background 0.2s;
+        }
+        .whatsapp-btn:hover {
+            background: #1ebe57;
+        }
+        .checkbox-label {
+            margin-top: 12px;
+        }
+        button[type="submit"] {
+            width: 100%;
+            background: linear-gradient(90deg, #2dbe7e 0%, #1e90ff 100%);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1.15em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 14px;
+            box-shadow: 0 2px 8px 0 rgba(44,190,126,0.10);
+            letter-spacing: 0.5px;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #1e90ff 0%, #2dbe7e 100%);
+            box-shadow: 0 4px 16px 0 rgba(44,190,126,0.18);
+            transform: translateY(-2px) scale(1.03);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 18px 4vw 18px 4vw;
+                margin-top: 10px;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+    <script>
+        function addPessoa() {
+            var num = parseInt(document.getElementById('num_pessoas').value) || 1;
+            var container = document.getElementById('pessoas_container');
+            container.innerHTML = '';
+            for (var i = 0; i < num; i++) {
+                container.innerHTML += '<div style="margin-bottom:10px;"><label>Nome pessoa ' + (i+1) + ': <input name="nome_pessoa_' + i + '" type="text" required></label> <label>Idade: <input type="number" name="idade_pessoa_' + i + '" min="0" required></label></div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var btnMais = document.getElementById('btn_mais');
+            var btnMenos = document.getElementById('btn_menos');
+            var numInput = document.getElementById('num_pessoas');
+            btnMais.addEventListener('click', function() {
+                var num = parseInt(numInput.value) || 1;
+                if (num < 20) { // Limite máximo opcional
+                    numInput.value = num + 1;
+                    addPessoa();
+                }
+            });
+            btnMenos.addEventListener('click', function() {
+                var num = parseInt(numInput.value) || 1;
+                if (num > 1) {
+                    numInput.value = num - 1;
+                    addPessoa();
+                }
+            });
+            addPessoa();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro Retiro Espiritual 2027 - IECA</h2>
+        <form method="post" autocomplete="on">
+            <label>Nome do solicitante:
+                <input name="nome" type="text" required placeholder="Seu nome completo">
+            </label>
+            <label>Número de pessoas:
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button type="button" id="btn_menos" style="width:32px;height:32px;font-size:1.3em;line-height:1;" aria-label="Remover pessoa">–</button>
+                    <input type="text" id="num_pessoas" name="num_pessoas" value="1" readonly style="width:40px;text-align:center;font-size:1.1em;" required>
+                    <button type="button" id="btn_mais" style="width:32px;height:32px;font-size:1.3em;line-height:1;" aria-label="Adicionar pessoa">+</button>
+                </div>
+            </label>
+            <div id="pessoas_container"></div>
+            <label>Número de parcelas (até 10):
+                <input type="number" name="parcelas" min="1" max="10" value="10" required>
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" name="concorda" required>
+                Concordo com as regras: Não pode atrasar mais de 3 parcelas, senão o boleto será cancelado e o valor devolvido.
+            </label>
+            <button type="submit">Gerar Boleto</button>
+        </form>
+    </div>
+    <!-- addPessoa() já é chamado no DOMContentLoaded -->
+</body>
+</html>

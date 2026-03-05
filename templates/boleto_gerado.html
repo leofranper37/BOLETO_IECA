@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Boleto Gerado{% endblock %}
+{% block content %}
+  <h1 class="title">Boleto gerado com sucesso!</h1>
+  <p>Você pode baixar o PDF abaixo:</p>
+  <a class="button is-link" href="{{ url_for('download_pdf', filename=filename) }}">Baixar PDF</a>
+{% endblock %}
